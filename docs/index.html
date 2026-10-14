@@ -6,70 +6,115 @@
 :root{--bg:#f6f7f9;--card:#fff;--tx:#1b1f24;--sub:#6b7280;--line:#e5e7eb}
 @media (prefers-color-scheme:dark){:root{--bg:#0f1216;--card:#181c22;--tx:#e8eaed;--sub:#9aa1ab;--line:#2a2f37}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;padding:20px;max-width:1200px;margin:auto}
+body{margin:0 auto;background:var(--bg);color:var(--tx);font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;padding:20px;max-width:1200px}
 h1{font-size:20px;margin:0 0 4px} .sub{color:var(--sub);font-size:12px;margin-bottom:16px}
-.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-bottom:18px}
-.big{font-size:48px;font-weight:700;color:#d9a400;line-height:1}
-.hero .lbl{color:var(--sub);font-size:12px}
-.bars{display:flex;gap:6px;align-items:flex-end;margin-left:auto;height:80px}
+h3{font-size:14px;margin:0 0 10px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:16px}
+.hero .hrow{display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start}
+.lbl{color:var(--sub);font-size:12px;line-height:1.6}
+.big{font-size:52px;font-weight:700;line-height:1.1}
+.score{font-size:40px;font-weight:700;line-height:1.2} .score small{font-size:14px;color:var(--sub);font-weight:500}
+.gauge{position:relative;margin:18px 0 6px;padding-top:16px}
+.segs{display:flex;height:26px;border-radius:7px;overflow:hidden}
+.segs div{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600}
+.mark{position:absolute;top:-2px;transform:translateX(-50%);font-size:16px;line-height:1}
+.ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-top:3px}
+.ticks em{font-style:normal}
+.how{font-size:12px;color:var(--sub);margin-top:8px;line-height:1.6}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--line)}
+th{color:var(--sub);font-weight:500;font-size:12px}
+tr.cur td{background:rgba(120,120,120,.14);font-weight:600}
+.note{font-size:12px;color:var(--sub);margin-top:10px;line-height:1.6}
+.bars{display:flex;gap:7px;align-items:flex-end;height:112px}
 .bar{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-size:10px;color:var(--sub)}
-.bar i{width:12px;border-radius:3px;display:block;margin-bottom:3px}
+.bar b{font-size:10px;color:var(--tx);font-weight:600;margin-bottom:2px}
+.bar i{width:14px;border-radius:3px;display:block;margin-bottom:3px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 @media (max-width:860px){.grid{grid-template-columns:1fr}}
 h2{font-size:13px;color:var(--sub);margin:0 0 10px}
-section{position:relative}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
 .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
 .name{font-size:13px;font-weight:600}
 .pill{color:#fff;font-size:11px;padding:2px 8px;border-radius:99px;white-space:nowrap}
 .val{font-size:26px;font-weight:700;margin:6px 0 2px} .val small{font-size:11px;color:var(--sub);font-weight:400}
-.chart{color:var(--tx)} .meta{font-size:11px;color:var(--sub);margin-top:4px}
+.chart{color:var(--tx)} .meta{font-size:11px;color:var(--sub);margin-top:4px;line-height:1.5}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;margin-bottom:6px}
+.legend i{display:inline-block;width:18px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+details summary{cursor:pointer;font-weight:600;font-size:14px} details ul{margin:10px 0 0;padding-left:18px;font-size:13px;line-height:1.7}
 footer{color:var(--sub);font-size:11px;margin-top:10px;line-height:1.6}
 </style></head><body>
 <h1>경제를 읽는 기술 · 인과 대시보드</h1>
-<div class="sub">실질 임금·소득 → 소비 → 청구건수·실업·침체 순서로 읽기 · 갱신 2026-10-14 15:26 KST</div>
-<div class="hero">
-  <div><div class="lbl">권장 주식 목표 비중</div><div class="big">80%</div></div>
-  <div><div class="lbl">경고 점수(최근 2개월 중 낮은 쪽)</div>
-       <div style="font-size:24px;font-weight:700">1.5 <small style="font-size:12px;color:var(--sub)">/ 현재월 1.5</small></div>
-       <div class="lbl">경고=1점, 주의=0.5점 · <1.0점 → 100% / <2.5점 → 80% / 그 이상점 → 50%</div></div>
-  <div class="bars" title="최근 12개월 경고 점수"><div class="bar"><i style="height:13px;background:#2e9e5b"></i><span>11</span></div><div class="bar"><i style="height:13px;background:#2e9e5b"></i><span>12</span></div><div class="bar"><i style="height:20px;background:#d9a400"></i><span>01</span></div><div class="bar"><i style="height:13px;background:#2e9e5b"></i><span>02</span></div><div class="bar"><i style="height:13px;background:#2e9e5b"></i><span>03</span></div><div class="bar"><i style="height:20px;background:#d9a400"></i><span>04</span></div><div class="bar"><i style="height:27px;background:#d9a400"></i><span>05</span></div><div class="bar"><i style="height:27px;background:#d9a400"></i><span>06</span></div><div class="bar"><i style="height:27px;background:#d9a400"></i><span>07</span></div><div class="bar"><i style="height:27px;background:#d9a400"></i><span>08</span></div><div class="bar"><i style="height:27px;background:#d9a400"></i><span>09</span></div><div class="bar"><i style="height:27px;background:#d9a400"></i><span>10</span></div></div>
+<div class="sub">실질 임금·소득 → 소비 → 청구건수·실업·침체 순서로 읽기 · 갱신 2026-10-14 16:27 KST</div>
+
+<div class="panel hero">
+  <div class="hrow">
+    <div><div class="lbl">권장 주식 비중 (전체 자산 기준 상한)</div>
+         <div class="big" style="color:#d9a400">60%</div>
+         <div class="lbl">나머지 40%는 채권·현금</div></div>
+    <div><div class="lbl">경기 경고 점수 (최근 2개월 중 낮은 쪽)</div>
+         <div class="score"><span style="color:#d9a400">1.5</span> <small>/ 5점 · 둔화</small></div>
+         <div class="lbl">이번 달 1.5점 · 지난달 1.5점<br>
+         이번 달 지표 5개 중 <b style="color:#d64545">경고 1</b> ·
+         <b style="color:#d9a400">주의 1</b> · <b style="color:#2e9e5b">양호 3</b></div></div>
+  </div>
+  <div class="gauge"><div class="segs"><div style="background:#2e9e5b"><span>안정</span></div><div style="background:#d9a400"><span>둔화</span></div><div style="background:#e8822a"><span>경계</span></div><div style="background:#d64545"><span>위험</span></div><div style="background:#9b1c1c"><span>침체급</span></div></div>
+    <div class="mark" style="left:30.0%"><b>▼</b></div>
+    <div class="ticks"><em>0</em><em>1</em><em>2</em><em>3</em><em>4</em><em>5</em></div></div>
+  <div class="how">점수 계산: 지표마다 <b>양호 0점 · 주의 0.5점 · 경고 1점</b>을 주고 5개를 더합니다.
+  전부 양호면 0점, 전부 경고면 5점입니다. 예) 경고 1개 + 주의 1개 = 1.5점.</div>
 </div>
+
+<div class="two">
+  <div class="panel"><h3>점수별 주식 비중표</h3>
+    <table><tr><th>상태</th><th>점수</th><th>주식</th><th>채권·현금</th></tr><tr><td><b style="color:#2e9e5b">●</b> 안정</td><td>0점 이상 ~ 1점 미만</td><td><b>70%</b></td><td>30%</td></tr><tr class="cur"><td><b style="color:#d9a400">●</b> 둔화</td><td>1점 이상 ~ 2점 미만</td><td><b>60%</b></td><td>40%</td></tr><tr><td><b style="color:#e8822a">●</b> 경계</td><td>2점 이상 ~ 3점 미만</td><td><b>50%</b></td><td>50%</td></tr><tr><td><b style="color:#d64545">●</b> 위험</td><td>3점 이상 ~ 4점 미만</td><td><b>40%</b></td><td>60%</td></tr><tr><td><b style="color:#9b1c1c">●</b> 침체급</td><td>4점 이상</td><td><b>30%</b></td><td>70%</td></tr></table>
+    <div class="note">70%가 상한입니다(30%는 항상 채권·현금 유지). 100%는 이 표가 아니라,
+    코로나급 급락 때 예비자금을 쓰는 <b>본인 판단</b>의 영역입니다.</div></div>
+  <div class="panel"><h3>최근 12개월 경고 점수</h3>
+    <div class="bars"><div class="bar"><b>0.5</b><i style="height:13px;background:#2e9e5b"></i><span>11월</span></div><div class="bar"><b>0.5</b><i style="height:13px;background:#2e9e5b"></i><span>12월</span></div><div class="bar"><b>1</b><i style="height:20px;background:#d9a400"></i><span>01월</span></div><div class="bar"><b>0.5</b><i style="height:13px;background:#2e9e5b"></i><span>02월</span></div><div class="bar"><b>0.5</b><i style="height:13px;background:#2e9e5b"></i><span>03월</span></div><div class="bar"><b>1</b><i style="height:20px;background:#d9a400"></i><span>04월</span></div><div class="bar"><b>1.5</b><i style="height:27px;background:#d9a400"></i><span>05월</span></div><div class="bar"><b>1.5</b><i style="height:27px;background:#d9a400"></i><span>06월</span></div><div class="bar"><b>1.5</b><i style="height:27px;background:#d9a400"></i><span>07월</span></div><div class="bar"><b>1.5</b><i style="height:27px;background:#d9a400"></i><span>08월</span></div><div class="bar"><b>1.5</b><i style="height:27px;background:#d9a400"></i><span>09월</span></div><div class="bar"><b>1.5</b><i style="height:27px;background:#d9a400"></i><span>10월</span></div></div>
+    <div class="note"><span style="color:#2e9e5b">■ 초록</span> 안정(1점 미만) ·
+    <span style="color:#d9a400">■ 노랑</span> 둔화·경계(1~3점) ·
+    <span style="color:#d64545">■ 빨강</span> 위험 이상(3점 이상).
+    막대 위 숫자가 그 달 점수이며, 몇 달째 오르는 중인지가 핵심입니다.</div></div>
+</div>
+
 <div class="grid"><section><h2>① 원인 — 소득</h2>
     <div class="card">
       <div class="top"><span class="name">실질 시간당 임금 증가율</span>
         <span class="pill" style="background:#d64545">경고</span></div>
       <div class="val">-0.04<small> % YoY, 3개월 평균</small></div>
-      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="24.8" y2="24.8" stroke="#2e9e5b" stroke-dasharray="3 3" opacity=".55"/><line x1="0" x2="240" y1="53.1" y2="53.1" stroke="#d64545" stroke-dasharray="3 3" opacity=".55"/><polyline points="4.0,19.8 10.8,18.9 17.6,16.9 24.5,18.2 31.3,21.2 38.1,29.0 44.9,31.9 51.8,28.9 58.6,25.4 65.4,19.3 72.2,13.6 79.1,8.4 85.9,10.5 92.7,15.6 99.5,21.1 106.4,21.0 113.2,15.3 120.0,7.6 126.8,4.0 133.6,7.2 140.5,11.7 147.3,17.6 154.1,23.3 160.9,23.3 167.8,23.3 174.6,17.9 181.4,18.2 188.2,26.5 195.1,39.9 201.9,57.2 208.7,60.0 215.5,59.2 222.4,54.1 229.2,54.1 236.0,54.1" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="54.1" r="3.2" fill="currentColor"/></svg></div>
-      <div class="meta">기준월 2026-10 · 초록 ≥ 1 · 빨강 < 0</div>
+      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="24.8" y2="24.8" stroke="#2e9e5b" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><line x1="0" x2="240" y1="53.1" y2="53.1" stroke="#d64545" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><polyline points="4.0,19.8 10.8,18.9 17.6,16.9 24.5,18.2 31.3,21.2 38.1,29.0 44.9,31.9 51.8,28.9 58.6,25.4 65.4,19.3 72.2,13.6 79.1,8.4 85.9,10.5 92.7,15.6 99.5,21.1 106.4,21.0 113.2,15.3 120.0,7.6 126.8,4.0 133.6,7.2 140.5,11.7 147.3,17.6 154.1,23.3 160.9,23.3 167.8,23.3 174.6,17.9 181.4,18.2 188.2,26.5 195.1,39.9 201.9,57.2 208.7,60.0 215.5,59.2 222.4,54.1 229.2,54.1 236.0,54.1" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="54.1" r="3.2" fill="currentColor"/></svg></div>
+      <div class="meta">기준월 2026-10 · <span style="color:#2e9e5b">┄ 초록선 ≥ 1</span> · <span style="color:#d64545">┄ 빨강선 < 0</span></div>
     </div>
     <div class="card">
       <div class="top"><span class="name">실질 소득 (이전소득 제외)</span>
         <span class="pill" style="background:#d9a400">주의</span></div>
       <div class="val">+0.96<small> % YoY, 3개월 평균</small></div>
-      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="47.8" y2="47.8" stroke="#2e9e5b" stroke-dasharray="3 3" opacity=".55"/><line x1="0" x2="240" y1="60.0" y2="60.0" stroke="#d64545" stroke-dasharray="3 3" opacity=".55"/><polyline points="4.0,8.7 10.6,4.0 17.3,4.6 23.9,8.9 30.5,14.7 37.1,18.0 43.8,19.3 50.4,19.7 57.0,20.9 63.7,23.5 70.3,26.1 76.9,28.0 83.5,30.0 90.2,32.3 96.8,33.7 103.4,34.5 110.1,32.2 116.7,30.6 123.3,31.7 129.9,36.3 136.6,39.1 143.2,39.3 149.8,38.4 156.5,39.6 163.1,41.0 169.7,43.5 176.3,44.3 183.0,44.8 189.6,46.1 196.2,50.6 202.9,52.7 209.5,51.4 216.1,48.6 222.7,48.3 229.4,48.3 236.0,48.3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="48.3" r="3.2" fill="currentColor"/></svg></div>
-      <div class="meta">기준월 2026-10 · 초록 ≥ 1 · 빨강 < 0</div>
+      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="47.8" y2="47.8" stroke="#2e9e5b" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><line x1="0" x2="240" y1="60.0" y2="60.0" stroke="#d64545" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><polyline points="4.0,8.7 10.6,4.0 17.3,4.6 23.9,8.9 30.5,14.7 37.1,18.0 43.8,19.3 50.4,19.7 57.0,20.9 63.7,23.5 70.3,26.1 76.9,28.0 83.5,30.0 90.2,32.3 96.8,33.7 103.4,34.5 110.1,32.2 116.7,30.6 123.3,31.7 129.9,36.3 136.6,39.1 143.2,39.3 149.8,38.4 156.5,39.6 163.1,41.0 169.7,43.5 176.3,44.3 183.0,44.8 189.6,46.1 196.2,50.6 202.9,52.7 209.5,51.4 216.1,48.6 222.7,48.3 229.4,48.3 236.0,48.3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="48.3" r="3.2" fill="currentColor"/></svg></div>
+      <div class="meta">기준월 2026-10 · <span style="color:#2e9e5b">┄ 초록선 ≥ 1</span> · <span style="color:#d64545">┄ 빨강선 < 0</span></div>
     </div></section><section><h2>② 중간 — 소비</h2>
     <div class="card">
       <div class="top"><span class="name">실질 소비지출</span>
         <span class="pill" style="background:#2e9e5b">양호</span></div>
       <div class="val">+2.50<small> % YoY, 3개월 평균</small></div>
-      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="37.0" y2="37.0" stroke="#2e9e5b" stroke-dasharray="3 3" opacity=".55"/><line x1="0" x2="240" y1="60.0" y2="60.0" stroke="#d64545" stroke-dasharray="3 3" opacity=".55"/><polyline points="4.0,27.5 10.6,18.6 17.3,22.6 23.9,28.1 30.5,33.8 37.1,27.5 43.8,21.0 50.4,16.4 57.0,12.4 63.7,12.7 70.3,10.9 76.9,9.5 83.5,7.6 90.2,4.7 96.8,4.0 103.4,7.2 110.1,11.2 116.7,13.1 123.3,16.2 129.9,21.6 136.6,24.5 143.2,21.4 149.8,21.9 156.5,23.5 163.1,27.9 169.7,35.3 176.3,38.7 183.0,38.2 189.6,34.9 196.2,33.8 202.9,31.4 209.5,25.4 216.1,24.8 222.7,25.4 229.4,25.4 236.0,25.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="25.4" r="3.2" fill="currentColor"/></svg></div>
-      <div class="meta">기준월 2026-10 · 초록 ≥ 2 · 빨강 < 1</div>
+      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="37.0" y2="37.0" stroke="#2e9e5b" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><line x1="0" x2="240" y1="60.0" y2="60.0" stroke="#d64545" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><polyline points="4.0,27.5 10.6,18.6 17.3,22.6 23.9,28.1 30.5,33.8 37.1,27.5 43.8,21.0 50.4,16.4 57.0,12.4 63.7,12.7 70.3,10.9 76.9,9.5 83.5,7.6 90.2,4.7 96.8,4.0 103.4,7.2 110.1,11.2 116.7,13.1 123.3,16.2 129.9,21.6 136.6,24.5 143.2,21.4 149.8,21.9 156.5,23.5 163.1,27.9 169.7,35.3 176.3,38.7 183.0,38.2 189.6,34.9 196.2,33.8 202.9,31.4 209.5,25.4 216.1,24.8 222.7,25.4 229.4,25.4 236.0,25.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="25.4" r="3.2" fill="currentColor"/></svg></div>
+      <div class="meta">기준월 2026-10 · <span style="color:#2e9e5b">┄ 초록선 ≥ 2</span> · <span style="color:#d64545">┄ 빨강선 < 1</span></div>
     </div></section><section><h2>③ 결과 — 고용·침체</h2>
     <div class="card">
       <div class="top"><span class="name">신규 실업수당 청구(4주 평균)</span>
         <span class="pill" style="background:#2e9e5b">양호</span></div>
       <div class="val">-12.66<small> % YoY</small></div>
-      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="20.3" y2="20.3" stroke="#2e9e5b" stroke-dasharray="3 3" opacity=".55"/><line x1="0" x2="240" y1="4.0" y2="4.0" stroke="#d64545" stroke-dasharray="3 3" opacity=".55"/><polyline points="4.0,28.3 10.6,36.0 17.3,36.7 23.9,34.0 30.5,43.9 37.1,42.3 43.8,38.5 50.4,45.9 57.0,39.7 63.7,42.5 70.3,36.0 76.9,17.4 83.5,33.8 90.2,26.3 96.8,29.7 103.4,32.4 110.1,26.4 116.7,30.0 123.3,28.1 129.9,29.1 136.6,41.6 143.2,43.1 149.8,28.8 156.5,43.0 163.1,33.9 169.7,38.3 176.3,41.1 183.0,37.3 189.6,47.7 196.2,46.3 202.9,52.9 209.5,48.8 216.1,48.2 222.7,52.6 229.4,60.0 236.0,57.3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="57.3" r="3.2" fill="currentColor"/></svg></div>
-      <div class="meta">기준월 2026-10 · 초록 < 10 · 빨강 > 20</div>
+      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="20.3" y2="20.3" stroke="#2e9e5b" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><line x1="0" x2="240" y1="4.0" y2="4.0" stroke="#d64545" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><polyline points="4.0,28.3 10.6,36.0 17.3,36.7 23.9,34.0 30.5,43.9 37.1,42.3 43.8,38.5 50.4,45.9 57.0,39.7 63.7,42.5 70.3,36.0 76.9,17.4 83.5,33.8 90.2,26.3 96.8,29.7 103.4,32.4 110.1,26.4 116.7,30.0 123.3,28.1 129.9,29.1 136.6,41.6 143.2,43.1 149.8,28.8 156.5,43.0 163.1,33.9 169.7,38.3 176.3,41.1 183.0,37.3 189.6,47.7 196.2,46.3 202.9,52.9 209.5,48.8 216.1,48.2 222.7,52.6 229.4,60.0 236.0,57.3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="57.3" r="3.2" fill="currentColor"/></svg></div>
+      <div class="meta">기준월 2026-10 · <span style="color:#2e9e5b">┄ 초록선 < 10</span> · <span style="color:#d64545">┄ 빨강선 > 20</span></div>
     </div>
     <div class="card">
       <div class="top"><span class="name">샴 룰 (침체 신호)</span>
         <span class="pill" style="background:#2e9e5b">양호</span></div>
       <div class="val">0.00<small> %p</small></div>
-      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="27.6" y2="27.6" stroke="#2e9e5b" stroke-dasharray="3 3" opacity=".55"/><line x1="0" x2="240" y1="10.1" y2="10.1" stroke="#d64545" stroke-dasharray="3 3" opacity=".55"/><polyline points="4.0,27.6 10.6,33.7 17.3,36.4 23.9,30.2 30.5,27.6 37.1,21.5 43.8,21.5 50.4,16.2 57.0,7.5 63.7,4.0 70.3,10.1 76.9,16.2 83.5,16.2 90.2,18.9 96.8,21.5 103.4,30.2 110.1,30.2 116.7,30.2 123.3,30.2 129.9,39.0 136.6,45.1 143.2,42.5 149.8,33.7 156.5,33.7 163.1,16.2 169.7,23.2 176.3,27.6 183.0,30.2 189.6,36.4 196.2,42.5 202.9,45.1 209.5,47.8 216.1,56.5 222.7,60.0 229.4,53.9 236.0,53.9" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="53.9" r="3.2" fill="currentColor"/></svg></div>
-      <div class="meta">기준월 2026-10 · 초록 < 0.3 · 빨강 > 0.5</div>
+      <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><line x1="0" x2="240" y1="27.6" y2="27.6" stroke="#2e9e5b" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><line x1="0" x2="240" y1="10.1" y2="10.1" stroke="#d64545" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/><polyline points="4.0,27.6 10.6,33.7 17.3,36.4 23.9,30.2 30.5,27.6 37.1,21.5 43.8,21.5 50.4,16.2 57.0,7.5 63.7,4.0 70.3,10.1 76.9,16.2 83.5,16.2 90.2,18.9 96.8,21.5 103.4,30.2 110.1,30.2 116.7,30.2 123.3,30.2 129.9,39.0 136.6,45.1 143.2,42.5 149.8,33.7 156.5,33.7 163.1,16.2 169.7,23.2 176.3,27.6 183.0,30.2 189.6,36.4 196.2,42.5 202.9,45.1 209.5,47.8 216.1,56.5 222.7,60.0 229.4,53.9 236.0,53.9" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="53.9" r="3.2" fill="currentColor"/></svg></div>
+      <div class="meta">기준월 2026-10 · <span style="color:#2e9e5b">┄ 초록선 < 0.3</span> · <span style="color:#d64545">┄ 빨강선 > 0.5</span></div>
     </div>
     <div class="card">
       <div class="top"><span class="name">실업률 (확인용)</span>
@@ -78,6 +123,20 @@ footer{color:var(--sub);font-size:11px;margin-top:10px;line-height:1.6}
       <div class="chart"><svg viewBox="0 0 240 64" width="100%" height="64" preserveAspectRatio="none"><polyline points="4.0,60.0 10.6,53.0 17.3,60.0 23.9,46.0 30.5,46.0 37.1,46.0 43.8,46.0 50.4,32.0 57.0,25.0 63.7,25.0 70.3,32.0 76.9,32.0 83.5,25.0 90.2,32.0 96.8,39.0 103.4,25.0 110.1,25.0 116.7,25.0 123.3,18.0 129.9,32.0 136.6,18.0 143.2,18.0 149.8,11.0 156.5,11.0 163.1,4.0 169.7,11.0 176.3,18.0 183.0,11.0 189.6,18.0 196.2,18.0 202.9,18.0 209.5,25.0 216.1,32.0 222.7,32.0 229.4,25.0 236.0,25.0" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="236" cy="25.0" r="3.2" fill="currentColor"/></svg></div>
       <div class="meta">기준월 2026-10 · 점수 미반영 · 참고용</div>
     </div></section></div>
-<footer>데이터: FRED(St. Louis Fed). 점선은 초록/빨강 기준선. 월간 지표는 발표 시차와 사후 수정이 있습니다.
-참고용 도구이며 투자 판단과 책임은 본인에게 있습니다. 임계값과 비중 규칙은 generate.py 상단 CONFIG에서 수정합니다.</footer>
+
+<div class="panel" style="margin-top:6px"><h3>한눈에 보기 — 원인이 결과를 앞서는지 확인</h3>
+  <div class="legend"><span><i style="background:#2b7de9"></i>① 실질 임금</span><span><i style="background:#14a3a3"></i>① 실질 소득</span><span><i style="background:#8e5bd1"></i>② 실질 소비</span><span><i style="background:#e8822a"></i>③ 청구건수 (뒤집음)</span></div><svg viewBox="0 0 900 300" width="100%" style="display:block"><line x1="34" x2="886" y1="132.4" y2="132.4" stroke="currentColor" opacity=".35" stroke-dasharray="4 4"/><text x="2" y="24" font-size="11" fill="currentColor" opacity=".7">좋음 ↑</text><text x="2" y="270" font-size="11" fill="currentColor" opacity=".7">나쁨 ↓</text><line x1="70.3" x2="70.3" y1="14" y2="272" stroke="currentColor" opacity=".1"/><text x="70.3" y="292" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">23-01</text><line x1="179.0" x2="179.0" y1="14" y2="272" stroke="currentColor" opacity=".1"/><text x="179.0" y="292" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">23-07</text><line x1="287.8" x2="287.8" y1="14" y2="272" stroke="currentColor" opacity=".1"/><text x="287.8" y="292" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">24-01</text><line x1="396.6" x2="396.6" y1="14" y2="272" stroke="currentColor" opacity=".1"/><text x="396.6" y="292" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">24-07</text><line x1="505.3" x2="505.3" y1="14" y2="272" stroke="currentColor" opacity=".1"/><text x="505.3" y="292" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">25-01</text><line x1="614.1" x2="614.1" y1="14" y2="272" stroke="currentColor" opacity=".1"/><text x="614.1" y="292" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">25-07</text><line x1="722.9" x2="722.9" y1="14" y2="272" stroke="currentColor" opacity=".1"/><text x="722.9" y="292" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">26-01</text><line x1="831.6" x2="831.6" y1="14" y2="272" stroke="currentColor" opacity=".1"/><text x="831.6" y="292" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">26-07</text><polyline points="34.0,259.1 52.1,238.9 70.3,226.1 88.4,214.9 106.5,191.7 124.6,169.2 142.8,144.6 160.9,120.3 179.0,97.8 197.1,96.2 215.3,111.3 233.4,116.5 251.5,110.5 269.7,108.8 287.8,105.1 305.9,107.5 324.0,113.0 342.2,127.4 360.3,132.7 378.4,127.1 396.6,120.8 414.7,109.4 432.8,99.1 450.9,89.4 469.1,93.3 487.2,102.7 505.3,112.8 523.4,112.6 541.6,102.1 559.7,87.9 577.8,81.4 596.0,87.2 614.1,95.6 632.2,106.4 650.3,116.9 668.5,116.9 686.6,116.9 722.9,106.9 741.0,107.5 759.1,122.8 777.2,147.3 795.4,179.2 813.5,184.4 831.6,182.9 849.7,173.6 867.9,173.6 886.0,173.6" fill="none" stroke="#2b7de9" stroke-width="2.2" stroke-linejoin="round"/><circle cx="886.0" cy="173.6" r="4" fill="#2b7de9"/><polyline points="34.0,218.5 52.1,216.1 70.3,192.2 88.4,164.8 106.5,134.4 124.6,115.3 142.8,95.8 160.9,78.1 179.0,71.0 197.1,71.3 215.3,81.6 233.4,79.2 251.5,68.6 269.7,55.9 287.8,57.6 305.9,69.2 324.0,84.9 342.2,94.1 360.3,97.5 378.4,98.5 396.6,101.7 414.7,108.9 432.8,115.9 450.9,121.0 469.1,126.5 487.2,132.8 505.3,136.8 523.4,138.9 541.6,132.7 559.7,128.2 577.8,131.3 596.0,143.7 614.1,151.5 632.2,152.0 650.3,149.5 668.5,152.7 686.6,156.5 704.7,163.2 722.9,165.5 741.0,166.9 759.1,170.5 777.2,182.7 795.4,188.5 813.5,184.8 831.6,177.1 849.7,176.5 867.9,176.5 886.0,176.5" fill="none" stroke="#14a3a3" stroke-width="2.2" stroke-linejoin="round"/><circle cx="886.0" cy="176.5" r="4" fill="#14a3a3"/><polyline points="34.0,208.5 52.1,227.1 70.3,198.1 88.4,157.0 106.5,139.8 124.6,168.6 142.8,192.1 160.9,193.1 179.0,170.5 197.1,161.8 215.3,157.9 233.4,164.1 251.5,138.9 269.7,105.1 287.8,120.3 305.9,141.1 324.0,162.5 342.2,138.6 360.3,113.9 378.4,96.7 396.6,81.5 414.7,82.4 432.8,75.8 450.9,70.4 469.1,63.0 487.2,52.3 505.3,49.5 523.4,61.5 541.6,77.0 559.7,84.0 577.8,95.9 596.0,116.5 614.1,127.5 632.2,115.4 650.3,117.5 668.5,123.5 686.6,140.3 704.7,168.2 722.9,181.5 741.0,179.6 759.1,166.9 777.2,162.8 795.4,153.4 813.5,130.8 831.6,128.4 849.7,130.9 867.9,130.9 886.0,130.9" fill="none" stroke="#8e5bd1" stroke-width="2.2" stroke-linejoin="round"/><circle cx="886.0" cy="130.9" r="4" fill="#8e5bd1"/><polyline points="34.0,26.9 52.1,109.8 70.3,64.8 88.4,95.1 106.5,149.8 124.6,161.2 142.8,159.7 160.9,229.7 179.0,203.4 197.1,198.6 215.3,197.7 233.4,166.8 251.5,166.2 269.7,137.8 287.8,135.3 305.9,145.4 324.0,109.0 342.2,114.8 360.3,128.6 378.4,101.5 396.6,124.3 414.7,114.0 432.8,138.0 450.9,206.5 469.1,146.2 487.2,173.7 505.3,161.0 523.4,151.1 541.6,173.2 559.7,160.2 577.8,167.0 596.0,163.4 614.1,117.2 632.2,111.7 650.3,164.5 668.5,112.2 686.6,145.6 704.7,129.4 722.9,119.3 741.0,133.2 759.1,94.7 777.2,100.0 795.4,75.6 813.5,90.9 831.6,93.1 849.7,76.7 867.9,49.5 886.0,59.5" fill="none" stroke="#e8822a" stroke-width="2.2" stroke-linejoin="round"/><circle cx="886.0" cy="59.5" r="4" fill="#e8822a"/></svg>
+  <div class="note">각 선을 같은 눈금으로 맞췄고(최근 48개월 평균=점선), 모두 <b>아래로 내려갈수록 나쁨</b>입니다.
+  ① 소득선이 먼저 꺾이고 → ② 소비선 → ③ 청구건수선 순서로 따라 내려가면 엘리스식 경기 둔화 신호입니다.
+  선들의 현재 위치(끝 점)가 점선보다 아래에 몰려 있는지 보세요.</div></div>
+
+<details class="panel"><summary>대시보드 읽는 법</summary>
+<ul>
+<li><b>초록 점선·빨강 점선</b>: 카드 차트의 판단 기준선입니다. 실질 임금·소득·소비처럼 높을수록 좋은 지표는 초록선 위면 양호, 빨강선 아래면 경고입니다. 청구건수·샴 룰은 낮을수록 좋아서 초록선 아래면 양호, 빨강선 위면 경고입니다. 두 선 사이는 주의입니다.</li>
+<li><b>샴 룰</b>: 실업률 3개월 평균이 직전 12개월 최저 대비 0.5%p 이상 오르면 침체 신호로 봅니다. 실업이 이미 오른 뒤에 나타나는 확인용 신호라 늦게 울리고, 과거 규칙일 뿐 법칙은 아닙니다.</li>
+<li><b>점수 해석</b>: 1점 미만은 대체로 안정, 1~2점은 일부 지표가 나빠지는 둔화 초기, 3점 이상은 여러 지표가 동시에 나쁜 구간입니다. 한 달 점수보다 방향(상승 중인지)이 더 중요합니다.</li>
+</ul></details>
+
+<footer>데이터: FRED(St. Louis Fed). 월간 지표는 발표 시차와 사후 수정이 있습니다. 경기 사이클 판단용 참고 도구이며 매매 타이밍을 알려주지 않습니다.
+임계값·비중은 임시 설정값이므로 과거 침체기 데이터로 검증한 뒤 쓰세요. 투자 판단과 책임은 본인에게 있습니다.</footer>
 </body></html>
