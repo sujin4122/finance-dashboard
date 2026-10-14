@@ -7,6 +7,7 @@ import json
 import os
 import pathlib
 import time
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone, timedelta
 
@@ -38,7 +39,7 @@ CONFIRM_MONTHS = 2
 CACHE_DIR = pathlib.Path(__file__).parent / "cache"
 
 SERIES = {
-    "wage": "CES0500000008", "cpi": "CPIAUCSL", "income": "W875RX1",
+    "wage": "AHETPI", "cpi": "CPIAUCSL", "income": "W875RX1",
     "pce": "PCEC96", "claims": "IC4WSA", "sahm": "SAHMREALTIME", "unrate": "UNRATE",
 }
 
@@ -74,6 +75,14 @@ def fetch(series_id: str) -> pd.Series:
             CACHE_DIR.mkdir(exist_ok=True)
             s.to_csv(cache, header=["value"], index_label="date")
             return s
+        except urllib.error.HTTPError as e:
+            body = e.read().decode(errors="ignore")[:300]
+            if e.code in (400, 404):  # 키 오류 또는 잘못된 시리즈 ID: 재시도 무의미
+                raise RuntimeError(f"[{series_id}] HTTP {e.code}: {body}") from e
+            last_err = e
+            print(f"[{series_id}] 시도 {attempt}/5 실패: HTTP {e.code}", flush=True)
+            time.sleep(5 * attempt)
+            continue
         except Exception as e:  # noqa: BLE001
             last_err = e
             print(f"[{series_id}] 시도 {attempt}/5 실패: {e}", flush=True)
