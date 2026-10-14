@@ -3,6 +3,10 @@ FRED(API 키 불필요)에서 데이터를 받아 docs/index.html 한 장을 만
 임계값·비중 규칙은 아래 CONFIG만 고치면 된다.
 """
 import io
+import json
+import os
+import pathlib
+import time
 import urllib.request
 from datetime import datetime, timezone, timedelta
 
@@ -31,20 +35,54 @@ WEIGHT_RULES = [(1.0, 100), (2.5, 80), (99, 50)]
 CONFIRM_MONTHS = 2
 # ──────────────────────────────────────────────────────────
 
+CACHE_DIR = pathlib.Path(__file__).parent / "cache"
+
 SERIES = {
     "wage": "CES0500000008", "cpi": "CPIAUCSL", "income": "W875RX1",
     "pce": "PCEC96", "claims": "IC4WSA", "sahm": "SAHMREALTIME", "unrate": "UNRATE",
 }
 
 
-def fetch(series_id: str) -> pd.Series:
+def _download(series_id: str) -> pd.Series:
+    key = os.environ.get("FRED_API_KEY", "").strip()
+    if key:  # 공식 API (가장 안정적)
+        url = ("https://api.stlouisfed.org/fred/series/observations"
+               f"?series_id={series_id}&api_key={key}&file_type=json&observation_start={START}")
+        with urllib.request.urlopen(url, timeout=60) as r:
+            obs = json.loads(r.read().decode())["observations"]
+        s = pd.Series([pd.to_numeric(o["value"], errors="coerce") for o in obs],
+                      index=pd.to_datetime([o["date"] for o in obs]))
+        return s.dropna()
     url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}&cosd={START}"
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    with urllib.request.urlopen(req, timeout=60) as r:
+    with urllib.request.urlopen(req, timeout=90) as r:
         df = pd.read_csv(io.StringIO(r.read().decode()))
     s = pd.Series(pd.to_numeric(df.iloc[:, 1], errors="coerce").values,
                   index=pd.to_datetime(df.iloc[:, 0]))
     return s.dropna()
+
+
+def fetch(series_id: str) -> pd.Series:
+    """재시도 후에도 실패하면 직전에 저장해 둔 캐시를 사용."""
+    cache = CACHE_DIR / f"{series_id}.csv"
+    last_err = None
+    for attempt in range(1, 6):
+        try:
+            s = _download(series_id)
+            if len(s) < 10:
+                raise ValueError("데이터가 비정상적으로 짧음")
+            CACHE_DIR.mkdir(exist_ok=True)
+            s.to_csv(cache, header=["value"], index_label="date")
+            return s
+        except Exception as e:  # noqa: BLE001
+            last_err = e
+            print(f"[{series_id}] 시도 {attempt}/5 실패: {e}", flush=True)
+            time.sleep(5 * attempt)
+    if cache.exists():
+        print(f"[{series_id}] 캐시 사용 (FRED 접속 실패)", flush=True)
+        c = pd.read_csv(cache, index_col=0, parse_dates=True)
+        return c["value"].dropna()
+    raise RuntimeError(f"{series_id} 다운로드 실패, 캐시도 없음: {last_err}")
 
 
 def monthly(s: pd.Series) -> pd.Series:
@@ -214,7 +252,6 @@ footer{{color:var(--sub);font-size:11px;margin-top:10px;line-height:1.6}}
 def main():
     raw = {k: fetch(v) for k, v in SERIES.items()}
     df = build_frame(raw)
-    import pathlib
     out = pathlib.Path(__file__).parent / "docs" / "index.html"
     out.parent.mkdir(exist_ok=True)
     out.write_text(render(df), encoding="utf-8")
