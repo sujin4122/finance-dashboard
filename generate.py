@@ -1,4 +1,4 @@
-"""엘리스식 인과 대시보드 생성기.
+"""엘리스식 인과 대시보드 생성기. (개인·비상업용)
 FRED에서 데이터를 받아 docs/index.html 한 장을 만든다.
 임계값·비중 규칙은 아래 CONFIG만 고치면 된다.
 """
@@ -42,8 +42,6 @@ ZONES = [
 CONFIRM_MONTHS = 2     # 최근 N개월 점수 중 낮은 쪽을 '확정 점수'로 사용
 # ──────────────────────────────────────────────────────────
 
-CACHE_DIR = pathlib.Path(__file__).parent / "cache"
-
 SERIES = {
     "wage": "AHETPI", "cpi": "CPIAUCSL", "income": "W875RX1",
     "pce": "PCEC96", "claims": "IC4WSA", "sahm": "SAHMREALTIME", "unrate": "UNRATE",
@@ -71,16 +69,14 @@ def _download(series_id: str) -> pd.Series:
 
 
 def fetch(series_id: str) -> pd.Series:
-    """재시도 후에도 실패하면 직전에 저장해 둔 캐시를 사용."""
-    cache = CACHE_DIR / f"{series_id}.csv"
+    """최대 5회 재시도. 데이터를 파일로 저장(캐시)하지 않는다(FRED 약관).
+    끝내 실패하면 오류로 종료하고, 이 경우 기존에 게시된 페이지가 그대로 유지된다."""
     last_err = None
     for attempt in range(1, 6):
         try:
             s = _download(series_id)
             if len(s) < 10:
                 raise ValueError("데이터가 비정상적으로 짧음")
-            CACHE_DIR.mkdir(exist_ok=True)
-            s.to_csv(cache, header=["value"], index_label="date")
             return s
         except urllib.error.HTTPError as e:
             body = e.read().decode(errors="ignore")[:300]
@@ -93,11 +89,7 @@ def fetch(series_id: str) -> pd.Series:
             last_err = e
             print(f"[{series_id}] 시도 {attempt}/5 실패: {e}", flush=True)
             time.sleep(5 * attempt)
-    if cache.exists():
-        print(f"[{series_id}] 캐시 사용 (FRED 접속 실패)", flush=True)
-        c = pd.read_csv(cache, index_col=0, parse_dates=True)
-        return c["value"].dropna()
-    raise RuntimeError(f"{series_id} 다운로드 실패, 캐시도 없음: {last_err}")
+    raise RuntimeError(f"{series_id} 다운로드 실패: {last_err}")
 
 
 def monthly(s: pd.Series) -> pd.Series:
@@ -304,6 +296,7 @@ def render(df: pd.DataFrame) -> str:
     return f"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
 <title>경제 인과 대시보드</title>
 <style>{CSS}</style></head><body>
 <h1>경제를 읽는 기술 · 인과 대시보드</h1>
@@ -355,8 +348,13 @@ def render(df: pd.DataFrame) -> str:
 <li><b>점수 해석</b>: 1점 미만은 대체로 안정, 1~2점은 일부 지표가 나빠지는 둔화 초기, 3점 이상은 여러 지표가 동시에 나쁜 구간입니다. 한 달 점수보다 방향(상승 중인지)이 더 중요합니다.</li>
 </ul></details>
 
-<footer>데이터: FRED(St. Louis Fed). 월간 지표는 발표 시차와 사후 수정이 있습니다. 경기 사이클 판단용 참고 도구이며 매매 타이밍을 알려주지 않습니다.
-임계값·비중은 임시 설정값이므로 과거 침체기 데이터로 검증한 뒤 쓰세요. 투자 판단과 책임은 본인에게 있습니다.</footer>
+<footer>
+<div class="fred"><b>This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.</b><br>
+데이터 출처: U.S. Bureau of Labor Statistics, U.S. Bureau of Economic Analysis, U.S. Department of Labor 등 via FRED®, Federal Reserve Bank of St. Louis (fred.stlouisfed.org).
+이 페이지를 이용하면 <a href="https://fred.stlouisfed.org/legal/terms_of_use.html">FRED® 이용약관(API 약관 포함)</a>에 동의한 것으로 봅니다.</div>
+월간 지표는 발표 시차와 사후 수정이 있습니다. 개인 공부용 참고 도구이며 투자 조언이 아니고 매매 타이밍을 알려주지 않습니다.
+임계값·비중은 백테스트 전의 임시 설정값입니다. 개인·비상업 참고용으로만 이용하세요. 투자 판단과 책임은 본인에게 있습니다.
+</footer>
 </body></html>"""
 
 
@@ -402,7 +400,9 @@ h2{font-size:13px;color:var(--sub);margin:0 0 10px}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;margin-bottom:6px}
 .legend i{display:inline-block;width:18px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
 details summary{cursor:pointer;font-weight:600;font-size:14px} details ul{margin:10px 0 0;padding-left:18px;font-size:13px;line-height:1.7}
-footer{color:var(--sub);font-size:11px;margin-top:10px;line-height:1.6}
+footer{color:var(--sub);font-size:11px;margin-top:10px;line-height:1.7}
+.fred{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:var(--card)}
+footer a{color:inherit}
 """
 
 
