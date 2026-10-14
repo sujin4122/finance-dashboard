@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
 <title>경제 인과 대시보드</title>
 <style>
 :root{--bg:#f6f7f9;--card:#fff;--tx:#1b1f24;--sub:#6b7280;--line:#e5e7eb}
@@ -44,10 +45,12 @@ h2{font-size:13px;color:var(--sub);margin:0 0 10px}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;margin-bottom:6px}
 .legend i{display:inline-block;width:18px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
 details summary{cursor:pointer;font-weight:600;font-size:14px} details ul{margin:10px 0 0;padding-left:18px;font-size:13px;line-height:1.7}
-footer{color:var(--sub);font-size:11px;margin-top:10px;line-height:1.6}
+footer{color:var(--sub);font-size:11px;margin-top:10px;line-height:1.7}
+.fred{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:var(--card)}
+footer a{color:inherit}
 </style></head><body>
 <h1>경제를 읽는 기술 · 인과 대시보드</h1>
-<div class="sub">실질 임금·소득 → 소비 → 청구건수·실업·침체 순서로 읽기 · 갱신 2026-10-14 16:27 KST</div>
+<div class="sub">실질 임금·소득 → 소비 → 청구건수·실업·침체 순서로 읽기 · 갱신 2026-10-14 19:05 KST</div>
 
 <div class="panel hero">
   <div class="hrow">
@@ -137,6 +140,11 @@ footer{color:var(--sub);font-size:11px;margin-top:10px;line-height:1.6}
 <li><b>점수 해석</b>: 1점 미만은 대체로 안정, 1~2점은 일부 지표가 나빠지는 둔화 초기, 3점 이상은 여러 지표가 동시에 나쁜 구간입니다. 한 달 점수보다 방향(상승 중인지)이 더 중요합니다.</li>
 </ul></details>
 
-<footer>데이터: FRED(St. Louis Fed). 월간 지표는 발표 시차와 사후 수정이 있습니다. 경기 사이클 판단용 참고 도구이며 매매 타이밍을 알려주지 않습니다.
-임계값·비중은 임시 설정값이므로 과거 침체기 데이터로 검증한 뒤 쓰세요. 투자 판단과 책임은 본인에게 있습니다.</footer>
+<footer>
+<div class="fred"><b>This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.</b><br>
+데이터 출처: U.S. Bureau of Labor Statistics, U.S. Bureau of Economic Analysis, U.S. Department of Labor 등 via FRED®, Federal Reserve Bank of St. Louis (fred.stlouisfed.org).
+이 페이지를 이용하면 <a href="https://fred.stlouisfed.org/legal/terms_of_use.html">FRED® 이용약관(API 약관 포함)</a>에 동의한 것으로 봅니다.</div>
+월간 지표는 발표 시차와 사후 수정이 있습니다. 개인 공부용 참고 도구이며 투자 조언이 아니고 매매 타이밍을 알려주지 않습니다.
+임계값·비중은 백테스트 전의 임시 설정값입니다. 개인·비상업 참고용으로만 이용하세요. 투자 판단과 책임은 본인에게 있습니다.
+</footer>
 </body></html>
